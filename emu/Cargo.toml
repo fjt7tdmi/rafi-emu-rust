@@ -5,3 +5,4 @@ authors = ["Akifumi Fujita <fujita.akifumi@gmail.com>"]
 
 [dependencies]
 byteorder = "1.2.4"
+num = "*"
