@@ -202,7 +202,7 @@ fn display(main_memory: &Vec<u8>) {
 fn main() {
     let main_memory_size = 65536;
 
-    let path = "../../rafi-emu-rust-data/rv32ui-p-add.bin";
+    let path = "../../rafi-emu-prebuilt-binary/riscv-tests/isa/rv32ui-p-add.bin";
     println!("Read {}", path);
 
     let mut f = File::open(path).unwrap();
