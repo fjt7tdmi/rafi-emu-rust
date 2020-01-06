@@ -10,7 +10,6 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Build
-      working-directory: ./emu
       run: cargo build --verbose
     - name: Run tests
       working-directory: ./emu
