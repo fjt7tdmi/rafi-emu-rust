@@ -92,7 +92,7 @@ fn decode(insn: &u32) -> RvOp {
     let rs2     = pick(insn, 20, 5) as RegId;
     let funct7  = pick(insn, 25, 7);
 
-    // TODO: sext
+    // TODO: sign_extend
     match opcode {
         0b0110111 => {
             let imm = pick(insn, 12, 20) << 12;
@@ -114,7 +114,7 @@ fn decode(insn: &u32) -> RvOp {
             }
         },
         0b1100011 => {
-            let imm = sext(13,
+            let imm = sign_extend(13,
                 pick(insn, 31, 1) << 12 |
                 pick(insn, 7, 1) << 11 |
                 pick(insn, 25, 6) << 5 |
@@ -130,7 +130,7 @@ fn decode(insn: &u32) -> RvOp {
             }
         },
         0b0000011 => {
-            let imm = sext(12, pick(insn, 20, 12));
+            let imm = sign_extend(12, pick(insn, 20, 12));
             match funct3 {
                 0b000 => RvOp::LB{ imm: imm, rd: rd, rs1: rs1 },
                 0b001 => RvOp::LH{ imm: imm, rd: rd, rs1: rs1 },
@@ -141,7 +141,7 @@ fn decode(insn: &u32) -> RvOp {
             }
         },
         0b0100011 => {
-            let imm = sext(12, pick(insn, 25, 7) << 5 | pick(insn, 7, 5));
+            let imm = sign_extend(12, pick(insn, 25, 7) << 5 | pick(insn, 7, 5));
             match funct3 {
                 0b000 => RvOp::SB{ imm: imm, rs1: rs1, rs2: rs2 },
                 0b001 => RvOp::SH{ imm: imm, rs1: rs1, rs2: rs2 },
@@ -150,7 +150,7 @@ fn decode(insn: &u32) -> RvOp {
             }
         },
         0b0010011 => {
-            let imm = sext(12, pick(insn, 20, 12));
+            let imm = sign_extend(12, pick(insn, 20, 12));
             let shamt = pick(insn, 20, 5);
             match (funct3, funct7) {
                 (0b000, _) => RvOp::ADDI { imm: imm, rd: rd, rs1: rs1 },
