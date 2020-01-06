@@ -1,4 +1,4 @@
-name: Rust
+name: run-test
 
 on: [push]
 
@@ -12,5 +12,4 @@ jobs:
     - name: Build
       run: cargo build --verbose
     - name: Run tests
-      working-directory: ./emu
       run: cargo test --verbose
