@@ -66,6 +66,11 @@ enum RvOp {
     CSRRWI  { csr: CsrId, imm: Imm, rd: RegId },
     CSRRSI  { csr: CsrId, imm: Imm, rd: RegId },
     CSRRCI  { csr: CsrId, imm: Imm, rd: RegId },
+    URET    { },
+    SRET    { },
+    MRET    { },
+    WFI     { },
+    SFENCE_VMA { rs1: RegId, rs2: RegId },
 }
 
 fn take_bit(value: &u32, lsb: usize, width: usize) -> u32 {
@@ -100,7 +105,7 @@ fn decode(insn: &u32) -> RvOp {
         0b1101111 => {
             let imm = take_bit(insn, 31, 1) << 20 | take_bit(insn, 21, 10) << 1 | take_bit(insn, 20, 1) << 12 | take_bit(insn, 12, 8) << 12;
             RvOp::JAL { imm: imm, rd: rd, }
-        }
+        },
         0b1100111 => {
             let imm = take_bit(insn, 20, 12);
             match funct3 {
@@ -109,6 +114,22 @@ fn decode(insn: &u32) -> RvOp {
             }
         },
         0b1100011 => {
+            let imm = sext(13,
+                take_bit(insn, 31, 1) << 12 |
+                take_bit(insn, 7, 1) << 11 |
+                take_bit(insn, 25, 6) << 5 |
+                take_bit(insn, 8, 4) << 1);
+            match funct3 {
+                0b000 => RvOp::BEQ  { imm: imm, rd: rd, rs1: rs1, rs2: rs2 },
+                0b001 => RvOp::BNE  { imm: imm, rd: rd, rs1: rs1, rs2: rs2 },
+                0b100 => RvOp::BLT  { imm: imm, rd: rd, rs1: rs1, rs2: rs2 },
+                0b101 => RvOp::BGE  { imm: imm, rd: rd, rs1: rs1, rs2: rs2 },
+                0b110 => RvOp::BLTU { imm: imm, rd: rd, rs1: rs1, rs2: rs2 },
+                0b111 => RvOp::BGEU { imm: imm, rd: rd, rs1: rs1, rs2: rs2 },
+                _ => RvOp::UNKNOWN { },
+            }
+        },
+        0b0000011 => {
             let imm = sext(12, take_bit(insn, 20, 12));
             match funct3 {
                 0b000 => RvOp::LB{ imm: imm, rd: rd, rs1: rs1 },
@@ -172,19 +193,23 @@ fn decode(insn: &u32) -> RvOp {
         0b1110011 => {
             let csr = take_bit(insn, 20, 12) as CsrId;
             let zimm = take_bit(insn, 15, 5);
-            match(funct3, csr, rs1, rd) {
-                (0b000, 0b000000000000, 0b00000, 0b00000) => RvOp::ECALL{ },
-                (0b000, 0b000000000001, 0b00000, 0b00000) => RvOp::EBREAK{ },
-                (0b001, _, _, _) => RvOp::CSRRW { csr: csr, rd: rd, rs1: rs1 },
-                (0b010, _, _, _) => RvOp::CSRRS { csr: csr, rd: rd, rs1: rs1 },
-                (0b011, _, _, _) => RvOp::CSRRC { csr: csr, rd: rd, rs1: rs1 },
-                (0b101, _, _, _) => RvOp::CSRRWI{ csr: csr, rd: rd, imm: zimm },
-                (0b110, _, _, _) => RvOp::CSRRSI{ csr: csr, rd: rd, imm: zimm },
-                (0b111, _, _, _) => RvOp::CSRRCI{ csr: csr, rd: rd, imm: zimm },
+            match(funct3, funct7, rs2, rs1, rd) {
+                (0b000, 0b0000000, 0b00000, 0b00000, 0b00000) => RvOp::ECALL{},
+                (0b000, 0b0000000, 0b00001, 0b00000, 0b00000) => RvOp::EBREAK{},
+                (0b000, 0b0000000, 0b00010, 0b00000, 0b00000) => RvOp::URET{},
+                (0b000, 0b0001000, 0b00010, 0b00000, 0b00000) => RvOp::SRET{},
+                (0b000, 0b0011000, 0b00010, 0b00000, 0b00000) => RvOp::MRET{},
+                (0b000, 0b0001000, 0b00101, 0b00000, 0b00000) => RvOp::WFI{},
+                (0b000, 0b0001001, _, _, 0b00000) => RvOp::SFENCE_VMA{ rs1: rs1, rs2: rs2 },
+                (0b001, _, _, _, _) => RvOp::CSRRW { csr: csr, rd: rd, rs1: rs1 },
+                (0b010, _, _, _, _) => RvOp::CSRRS { csr: csr, rd: rd, rs1: rs1 },
+                (0b011, _, _, _, _) => RvOp::CSRRC { csr: csr, rd: rd, rs1: rs1 },
+                (0b101, _, _, _, _) => RvOp::CSRRWI{ csr: csr, rd: rd, imm: zimm },
+                (0b110, _, _, _, _) => RvOp::CSRRSI{ csr: csr, rd: rd, imm: zimm },
+                (0b111, _, _, _, _) => RvOp::CSRRCI{ csr: csr, rd: rd, imm: zimm },
                 _ => RvOp::UNKNOWN { },
             }
         },
-        // TODO: impl
         _ => RvOp::UNKNOWN { },
     }
 }
