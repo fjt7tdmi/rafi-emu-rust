@@ -1,7 +1,7 @@
 extern crate byteorder;
 
 mod util;
-mod reg;
+mod core;
 
 use byteorder::{LittleEndian, ReadBytesExt};
 use std::io::prelude::*;
