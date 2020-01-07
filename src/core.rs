@@ -31,7 +31,6 @@ pub struct Csr {
     // TODO: impl
 }
 
-#[allow(dead_code)]
 impl Csr {  
     pub fn new() -> Csr {
         Csr {}
@@ -45,7 +44,6 @@ pub struct Core {
     pub next_pc: u32,
 }
 
-#[allow(dead_code)]
 impl Core {
     pub fn new() -> Core {
         Core { csr: Csr::new(), int_reg: IntReg::new(), pc: 0, next_pc: 0 }
