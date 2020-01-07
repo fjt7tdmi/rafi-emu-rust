@@ -38,12 +38,11 @@ impl Csr {
     }
 }
 
-#[allow(dead_code)]
 pub struct Core {
-    csr: Csr,
-    int_reg: IntReg,
-    pc: u32,
-    next_pc: u32,
+    pub csr: Csr,
+    pub int_reg: IntReg,
+    pub pc: u32,
+    pub next_pc: u32,
 }
 
 #[allow(dead_code)]
