@@ -74,10 +74,6 @@ enum RvOp {
     SFENCE_VMA { rs1: RegId, rs2: RegId },
 }
 
-fn pick(value: &u32, lsb: usize, width: usize) -> u32 {
-    (value >> lsb) & ((1 << width) - 1)
-}
-
 fn fetch(main_memory: &Vec<u8>, addr: u64) -> u32 {
     let mut cursor = Cursor::new(main_memory);
     Cursor::set_position(&mut cursor, addr);

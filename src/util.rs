@@ -13,3 +13,7 @@ fn sext_test() {
     assert_eq!(sign_extend(15, 0x00008888), 0xffff8888);
     assert_eq!(sign_extend(16, 0x00008888), 0x00008888);
 }
+
+pub fn pick(value: &u32, lsb: usize, width: usize) -> u32 {
+    (value >> lsb) & ((1 << width) - 1)
+}
