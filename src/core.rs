@@ -1,3 +1,5 @@
+use bus::*;
+
 pub struct IntReg {
     values: [u32; 32],
 }
@@ -37,15 +39,20 @@ impl Csr {
     }
 }
 
-pub struct Core {
+pub struct Core<'a> {    
     pub csr: Csr,
     pub int_reg: IntReg,
     pub pc: u32,
     pub next_pc: u32,
+    bus: &'a mut Bus<'a>,
 }
 
-impl Core {
-    pub fn new() -> Core {
-        Core { csr: Csr::new(), int_reg: IntReg::new(), pc: 0, next_pc: 0 }
+impl<'a> Core<'a> {
+    pub fn new(bus: &'a mut Bus<'a>) -> Core<'a> {
+        Core { csr: Csr::new(), int_reg: IntReg::new(), pc: 0, next_pc: 0, bus: bus }
+    }
+
+    pub fn fetch(&self) -> u32 {
+        self.bus.read_u32(self.pc)
     }
 }

@@ -1,13 +1,13 @@
 use memory::*;
 
 #[allow(dead_code)]
-pub struct Bus {
-    pub memory: Memory,
+pub struct Bus<'a> {
+    pub memory: &'a Memory,
 }
 
 #[allow(dead_code)]
-impl Bus {
-    pub fn new(memory: Memory) -> Bus {
+impl Bus<'_> {
+    pub fn new(memory: &mut Memory) -> Bus {
         Bus { memory: memory }
     }
 

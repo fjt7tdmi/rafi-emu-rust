@@ -7,6 +7,7 @@ mod memory;
 mod op;
 mod util;
 
+use bus::*;
 use core::*;
 use decoder::*;
 use memory::*;
@@ -16,13 +17,13 @@ fn emulate(path: String) {
     let host_io_addr = 0x1000;
 
     let mut memory = Memory::new();
-    let mut core = Core::new();
-
-    println!("Read {}", path);
     memory.load_file(path);
 
-    for i in 0..max_cycle {
-        let insn = memory.read_u32(i * 4);
+    let mut bus = Bus::new(&mut memory);
+    let mut core = Core::new(&mut bus);
+
+    for _i in 0..max_cycle {
+        let insn = core.fetch();
         let op = decode(&insn);
         
         op.execute(&mut core);

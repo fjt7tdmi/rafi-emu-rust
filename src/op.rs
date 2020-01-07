@@ -1,4 +1,6 @@
+use bus::*;
 use core::*;
+use memory::*;
 
 pub trait Op {
     fn execute(&self, core: &mut Core);
@@ -27,7 +29,9 @@ impl Op for LUI {
 
 #[test]
 fn test_lui() {
-    let mut core = Core::new();
+    let mut memory = Memory::new();
+    let mut bus = Bus::new(&mut memory);
+    let mut core = Core::new(&mut bus);
     let op = LUI { rd: 1, imm: 0x12340000 };
 
     op.execute(&mut core);    
@@ -49,7 +53,9 @@ impl Op for AUIPC {
 
 #[test]
 fn test_auipc() {
-    let mut core = Core::new();
+    let mut memory = Memory::new();
+    let mut bus = Bus::new(&mut memory);
+    let mut core = Core::new(&mut bus);
     let op = AUIPC { rd: 1, imm: 0x80000000 };
 
     core.pc = 0x40000000;
