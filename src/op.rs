@@ -1,8 +1,18 @@
 use core::*;
 
-trait Op {
+pub trait Op {
     fn execute(&self, core: &mut Core);
 }
+
+pub struct UnknownOp {
+}
+
+impl Op for UnknownOp {
+    fn execute(&self, _core: &mut Core) {
+        panic!("execute unknown op.");
+    }
+}
+
 
 pub struct LUI {
     pub rd: usize,
