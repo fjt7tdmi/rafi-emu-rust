@@ -1,5 +1,6 @@
 extern crate byteorder;
 
+mod bus;
 mod core;
 mod decoder;
 mod memory;
