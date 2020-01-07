@@ -94,3 +94,117 @@ impl Op for JALR {
         core.int_reg.write(self.rd, next_pc);
     }
 }
+
+#[allow(dead_code)]
+pub struct BEQ {
+    pub rs1: usize,
+    pub rs2: usize,
+    pub imm: u32,
+}
+
+#[allow(dead_code)]
+impl Op for BEQ {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let src2 = core.int_reg.read(self.rs2);
+
+        if src1 == src2 {
+            core.next_pc = core.pc.wrapping_add(self.imm);
+        }
+    }
+}
+
+#[allow(dead_code)]
+pub struct BNE {
+    pub rs1: usize,
+    pub rs2: usize,
+    pub imm: u32,
+}
+
+#[allow(dead_code)]
+impl Op for BNE {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let src2 = core.int_reg.read(self.rs2);
+
+        if src1 != src2 {
+            core.next_pc = core.pc.wrapping_add(self.imm);
+        }
+    }
+}
+
+#[allow(dead_code)]
+pub struct BLT {
+    pub rs1: usize,
+    pub rs2: usize,
+    pub imm: u32,
+}
+
+#[allow(dead_code)]
+impl Op for BLT {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1) as i32;
+        let src2 = core.int_reg.read(self.rs2) as i32;
+
+        if src1 < src2 {
+            core.next_pc = core.pc.wrapping_add(self.imm);
+        }
+    }
+}
+
+#[allow(dead_code)]
+pub struct BGE {
+    pub rs1: usize,
+    pub rs2: usize,
+    pub imm: u32,
+}
+
+#[allow(dead_code)]
+impl Op for BGE {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1) as i32;
+        let src2 = core.int_reg.read(self.rs2) as i32;
+
+        if src1 >= src2 {
+            core.next_pc = core.pc.wrapping_add(self.imm);
+        }
+    }
+}
+
+#[allow(dead_code)]
+pub struct BLTU {
+    pub rs1: usize,
+    pub rs2: usize,
+    pub imm: u32,
+}
+
+#[allow(dead_code)]
+impl Op for BLTU {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let src2 = core.int_reg.read(self.rs2);
+
+        if src1 < src2 {
+            core.next_pc = core.pc.wrapping_add(self.imm);
+        }
+    }
+}
+
+#[allow(dead_code)]
+pub struct BGEU {
+    pub rs1: usize,
+    pub rs2: usize,
+    pub imm: u32,
+}
+
+#[allow(dead_code)]
+impl Op for BGEU {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let src2 = core.int_reg.read(self.rs2);
+
+        if src1 >= src2 {
+            core.next_pc = core.pc.wrapping_add(self.imm);
+        }
+    }
+}
