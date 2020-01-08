@@ -331,7 +331,7 @@ pub struct LB {
 #[allow(dead_code)]
 impl Op for LB {
     fn execute(&self, core: &mut Core) {
-        let addr = core.int_reg.read(self.rs1) + self.imm;
+        let addr = core.int_reg.read(self.rs1).wrapping_add(self.imm);
         let value = sign_extend(8, core.bus.read_u8(addr) as u32);
 
         core.int_reg.write(self.rd, value);
@@ -355,7 +355,7 @@ pub struct LH {
 #[allow(dead_code)]
 impl Op for LH {
     fn execute(&self, core: &mut Core) {
-        let addr = core.int_reg.read(self.rs1) + self.imm;
+        let addr = core.int_reg.read(self.rs1).wrapping_add(self.imm);
         let value = sign_extend(16, core.bus.read_u16(addr) as u32);
 
         core.int_reg.write(self.rd, value);
@@ -379,7 +379,7 @@ pub struct LW {
 #[allow(dead_code)]
 impl Op for LW {
     fn execute(&self, core: &mut Core) {
-        let addr = core.int_reg.read(self.rs1) + self.imm;
+        let addr = core.int_reg.read(self.rs1).wrapping_add(self.imm);
         let value = core.bus.read_u32(addr);
 
         core.int_reg.write(self.rd, value);
@@ -403,7 +403,7 @@ pub struct LBU {
 #[allow(dead_code)]
 impl Op for LBU {
     fn execute(&self, core: &mut Core) {
-        let addr = core.int_reg.read(self.rs1) + self.imm;
+        let addr = core.int_reg.read(self.rs1).wrapping_add(self.imm);
         let value = core.bus.read_u8(addr) as u32;
 
         core.int_reg.write(self.rd, value);
@@ -427,7 +427,7 @@ pub struct LHU {
 #[allow(dead_code)]
 impl Op for LHU {
     fn execute(&self, core: &mut Core) {
-        let addr = core.int_reg.read(self.rs1) + self.imm;
+        let addr = core.int_reg.read(self.rs1).wrapping_add(self.imm);
         let value = core.bus.read_u16(addr) as u32;
 
         core.int_reg.write(self.rd, value);
@@ -451,7 +451,7 @@ pub struct SB {
 #[allow(dead_code)]
 impl Op for SB {
     fn execute(&self, core: &mut Core) {
-        let addr = core.int_reg.read(self.rs1) + self.imm;
+        let addr = core.int_reg.read(self.rs1).wrapping_add(self.imm);
         let value = core.int_reg.read(self.rs1) as u8;
 
         core.bus.write_u8(addr, value);
@@ -475,7 +475,7 @@ pub struct SH {
 #[allow(dead_code)]
 impl Op for SH {
     fn execute(&self, core: &mut Core) {
-        let addr = core.int_reg.read(self.rs1) + self.imm;
+        let addr = core.int_reg.read(self.rs1).wrapping_add(self.imm);
         let value = core.int_reg.read(self.rs1) as u16;
 
         core.bus.write_u16(addr, value);
@@ -499,7 +499,7 @@ pub struct SW {
 #[allow(dead_code)]
 impl Op for SW {
     fn execute(&self, core: &mut Core) {
-        let addr = core.int_reg.read(self.rs1) + self.imm;
+        let addr = core.int_reg.read(self.rs1).wrapping_add(self.imm);
         let value = core.int_reg.read(self.rs1) as u32;
 
         core.bus.write_u32(addr, value);
@@ -512,3 +512,4 @@ impl ToString for SW {
         format!("sw {},{}({})", get_int_reg_name(self.rs2), self.imm, get_int_reg_name(self.rs1))
     }
 }
+
