@@ -440,3 +440,75 @@ impl ToString for LHU {
         format!("lhu {},{}({})", get_int_reg_name(self.rd), self.imm, get_int_reg_name(self.rs1))
     }
 }
+
+#[allow(dead_code)]
+pub struct SB {
+    pub rs1: usize,
+    pub rs2: usize,
+    pub imm: u32,
+}
+
+#[allow(dead_code)]
+impl Op for SB {
+    fn execute(&self, core: &mut Core) {
+        let addr = core.int_reg.read(self.rs1) + self.imm;
+        let value = core.int_reg.read(self.rs1) as u8;
+
+        core.bus.write_u8(addr, value);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for SB {
+    fn to_string(&self) -> String {
+        format!("sb {},{}({})", get_int_reg_name(self.rs2), self.imm, get_int_reg_name(self.rs1))
+    }
+}
+
+#[allow(dead_code)]
+pub struct SH {
+    pub rs1: usize,
+    pub rs2: usize,
+    pub imm: u32,
+}
+
+#[allow(dead_code)]
+impl Op for SH {
+    fn execute(&self, core: &mut Core) {
+        let addr = core.int_reg.read(self.rs1) + self.imm;
+        let value = core.int_reg.read(self.rs1) as u16;
+
+        core.bus.write_u16(addr, value);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for SH {
+    fn to_string(&self) -> String {
+        format!("sh {},{}({})", get_int_reg_name(self.rs2), self.imm, get_int_reg_name(self.rs1))
+    }
+}
+
+#[allow(dead_code)]
+pub struct SW {
+    pub rs1: usize,
+    pub rs2: usize,
+    pub imm: u32,
+}
+
+#[allow(dead_code)]
+impl Op for SW {
+    fn execute(&self, core: &mut Core) {
+        let addr = core.int_reg.read(self.rs1) + self.imm;
+        let value = core.int_reg.read(self.rs1) as u32;
+
+        core.bus.write_u32(addr, value);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for SW {
+    fn to_string(&self) -> String {
+        format!("sw {},{}({})", get_int_reg_name(self.rs2), self.imm, get_int_reg_name(self.rs1))
+    }
+}

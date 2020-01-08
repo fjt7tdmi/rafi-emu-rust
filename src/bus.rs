@@ -2,7 +2,7 @@ use memory::*;
 
 #[allow(dead_code)]
 pub struct Bus<'a> {
-    pub memory: &'a Memory,
+    pub memory: &'a mut Memory,
 }
 
 #[allow(dead_code)]
@@ -21,5 +21,17 @@ impl Bus<'_> {
 
     pub fn read_u32(&self, addr: u32) -> u32 {
         self.memory.read_u32(addr.wrapping_sub(0x8000_0000) as u64)
+    }
+
+    pub fn write_u8(&mut self, addr: u32, value: u8) {
+        self.memory.write_u8(addr.wrapping_sub(0x8000_0000) as u64, value)
+    }
+
+    pub fn write_u16(&mut self, addr: u32, value: u16) {
+        self.memory.write_u16(addr.wrapping_sub(0x8000_0000) as u64, value)
+    }
+
+    pub fn write_u32(&mut self, addr: u32, value: u32) {
+        self.memory.write_u32(addr.wrapping_sub(0x8000_0000) as u64, value)
     }
 }
