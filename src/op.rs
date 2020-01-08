@@ -1,8 +1,11 @@
 use bus::*;
 use core::*;
 use memory::*;
+use util::*;
 
-pub trait Op {
+use std::string::ToString;
+
+pub trait Op : ToString {
     fn execute(&self, core: &mut Core);
 }
 
@@ -15,6 +18,11 @@ impl Op for UnknownOp {
     }
 }
 
+impl ToString for UnknownOp {
+    fn to_string(&self) -> String {
+        "unknown".to_string()
+    }
+}
 
 pub struct LUI {
     pub rd: usize,
@@ -27,12 +35,20 @@ impl Op for LUI {
     }
 }
 
+impl ToString for LUI {
+    fn to_string(&self) -> String {
+        format!("lui {},0x{:x}", get_int_reg_name(self.rd), self.imm)
+    }
+}
+
 #[test]
 fn test_lui() {
     let mut memory = Memory::new();
     let mut bus = Bus::new(&mut memory);
     let mut core = Core::new(&mut bus);
+
     let op = LUI { rd: 1, imm: 0x12340000 };
+    assert_eq!(op.to_string(), "lui ra,0x12340000");
 
     op.execute(&mut core);    
     assert_eq!(core.int_reg.read(1), 0x12340000);
@@ -51,12 +67,20 @@ impl Op for AUIPC {
     }
 }
 
+impl ToString for AUIPC {
+    fn to_string(&self) -> String {
+        format!("auipc {},0x{:x}", get_int_reg_name(self.rd), self.imm)
+    }
+}
+
 #[test]
 fn test_auipc() {
     let mut memory = Memory::new();
     let mut bus = Bus::new(&mut memory);
     let mut core = Core::new(&mut bus);
+
     let op = AUIPC { rd: 1, imm: 0x80000000 };
+    assert_eq!(op.to_string(), "auipc ra,0x80000000");
 
     core.pc = 0x40000000;
     op.execute(&mut core);    
@@ -84,6 +108,16 @@ impl Op for JAL {
 }
 
 #[allow(dead_code)]
+impl ToString for JAL {
+    fn to_string(&self) -> String {
+        match self.rd {
+            0 => format!("j #{}", self.imm),
+            _ => format!("jal {},{}", get_int_reg_name(self.rd), self.imm),
+        }
+    }
+}
+
+#[allow(dead_code)]
 pub struct JALR {
     pub rd: usize,
     pub rs1: usize,
@@ -102,6 +136,16 @@ impl Op for JALR {
 }
 
 #[allow(dead_code)]
+impl ToString for JALR {
+    fn to_string(&self) -> String {
+        match self.rd {
+            0 => format!("jr {},{}", get_int_reg_name(self.rs1), self.imm),
+            _ => format!("jalr {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), self.imm),
+        }
+    }
+}
+
+#[allow(dead_code)]
 pub struct BEQ {
     pub rs1: usize,
     pub rs2: usize,
@@ -116,6 +160,17 @@ impl Op for BEQ {
 
         if src1 == src2 {
             core.next_pc = core.pc.wrapping_add(self.imm);
+        }
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for BEQ {
+    fn to_string(&self) -> String {
+        match (self.rs1, self.rs2) {
+            (0, _) => format!("beqz {}, #{}", get_int_reg_name(self.rs2), self.imm),
+            (_, 0) => format!("beqz {}, #{}", get_int_reg_name(self.rs1), self.imm),
+            (_, _) => format!("beq {},{},{}", get_int_reg_name(self.rs1), get_int_reg_name(self.rs2), self.imm),
         }
     }
 }
@@ -140,6 +195,17 @@ impl Op for BNE {
 }
 
 #[allow(dead_code)]
+impl ToString for BNE {
+    fn to_string(&self) -> String {
+        match (self.rs1, self.rs2) {
+            (0, _) => format!("bnez {}, #{}", get_int_reg_name(self.rs2), self.imm),
+            (_, 0) => format!("bnez {}, #{}", get_int_reg_name(self.rs1), self.imm),
+            (_, _) => format!("bne {},{},{}", get_int_reg_name(self.rs1), get_int_reg_name(self.rs2), self.imm),
+        }
+    }
+}
+
+#[allow(dead_code)]
 pub struct BLT {
     pub rs1: usize,
     pub rs2: usize,
@@ -154,6 +220,17 @@ impl Op for BLT {
 
         if src1 < src2 {
             core.next_pc = core.pc.wrapping_add(self.imm);
+        }
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for BLT {
+    fn to_string(&self) -> String {
+        match (self.rs1, self.rs2) {
+            (0, _) => format!("bltz {}, #{}", get_int_reg_name(self.rs2), self.imm),
+            (_, 0) => format!("bltz {}, #{}", get_int_reg_name(self.rs1), self.imm),
+            (_, _) => format!("blt {},{},{}", get_int_reg_name(self.rs1), get_int_reg_name(self.rs2), self.imm),
         }
     }
 }
@@ -178,6 +255,17 @@ impl Op for BGE {
 }
 
 #[allow(dead_code)]
+impl ToString for BGE {
+    fn to_string(&self) -> String {
+        match (self.rs1, self.rs2) {
+            (0, _) => format!("bgez {}, #{}", get_int_reg_name(self.rs2), self.imm),
+            (_, 0) => format!("bgez {}, #{}", get_int_reg_name(self.rs1), self.imm),
+            (_, _) => format!("bge {},{},{}", get_int_reg_name(self.rs1), get_int_reg_name(self.rs2), self.imm),
+        }
+    }
+}
+
+#[allow(dead_code)]
 pub struct BLTU {
     pub rs1: usize,
     pub rs2: usize,
@@ -197,6 +285,13 @@ impl Op for BLTU {
 }
 
 #[allow(dead_code)]
+impl ToString for BLTU {
+    fn to_string(&self) -> String {
+        format!("bltu {},{},{}", get_int_reg_name(self.rs1), get_int_reg_name(self.rs2), self.imm)
+    }
+}
+
+#[allow(dead_code)]
 pub struct BGEU {
     pub rs1: usize,
     pub rs2: usize,
@@ -212,5 +307,12 @@ impl Op for BGEU {
         if src1 >= src2 {
             core.next_pc = core.pc.wrapping_add(self.imm);
         }
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for BGEU {
+    fn to_string(&self) -> String {
+        format!("bgeu {},{},{}", get_int_reg_name(self.rs1), get_int_reg_name(self.rs2), self.imm)
     }
 }
