@@ -44,7 +44,7 @@ pub struct Core<'a> {
     pub int_reg: IntReg,
     pub pc: u32,
     pub next_pc: u32,
-    bus: &'a mut Bus<'a>,
+    pub bus: &'a mut Bus<'a>,
 }
 
 impl<'a> Core<'a> {

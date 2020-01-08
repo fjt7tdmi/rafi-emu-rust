@@ -26,6 +26,8 @@ fn emulate(path: String) {
         let insn = core.fetch();
         let op = decode(&insn);
         
+        println!("{}", op.to_string());
+
         op.execute(&mut core);
     }
 
