@@ -1,6 +1,4 @@
-use bus::*;
 use core::*;
-use memory::*;
 use util::*;
 
 use std::string::ToString;
@@ -43,6 +41,9 @@ impl ToString for LUI {
 
 #[test]
 fn test_lui() {
+    use bus::*;
+    use memory::*;
+
     let mut memory = Memory::new();
     let mut bus = Bus::new(&mut memory);
     let mut core = Core::new(&mut bus);
@@ -75,6 +76,9 @@ impl ToString for AUIPC {
 
 #[test]
 fn test_auipc() {
+    use bus::*;
+    use memory::*;
+
     let mut memory = Memory::new();
     let mut bus = Bus::new(&mut memory);
     let mut core = Core::new(&mut bus);
