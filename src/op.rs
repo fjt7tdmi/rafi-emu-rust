@@ -1214,3 +1214,88 @@ impl ToString for CSRRCI {
         }
     }
 }
+
+#[allow(dead_code)]
+pub struct URET {
+}
+
+#[allow(dead_code)]
+impl Op for URET {
+    fn execute(&self, _core: &mut Core) {
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for URET {
+    fn to_string(&self) -> String {
+        format!("uret")
+    }
+}
+
+#[allow(dead_code)]
+pub struct SRET {
+}
+
+#[allow(dead_code)]
+impl Op for SRET {
+    fn execute(&self, _core: &mut Core) {
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for SRET {
+    fn to_string(&self) -> String {
+        format!("sret")
+    }
+}
+
+#[allow(dead_code)]
+pub struct MRET {
+}
+
+#[allow(dead_code)]
+impl Op for MRET {
+    fn execute(&self, _core: &mut Core) {
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for MRET {
+    fn to_string(&self) -> String {
+        format!("mret")
+    }
+}
+
+#[allow(dead_code)]
+pub struct WFI {
+}
+
+#[allow(dead_code)]
+impl Op for WFI {
+    fn execute(&self, _core: &mut Core) {
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for WFI {
+    fn to_string(&self) -> String {
+        format!("wfi")
+    }
+}
+
+#[allow(dead_code)]
+pub struct SFENCEVMA {
+}
+
+#[allow(dead_code)]
+impl Op for SFENCEVMA {
+    fn execute(&self, _core: &mut Core) {
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for SFENCEVMA {
+    fn to_string(&self) -> String {
+        format!("sfence.vma")
+    }
+}
