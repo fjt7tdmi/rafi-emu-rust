@@ -1073,3 +1073,144 @@ impl ToString for CSRRW {
         }
     }
 }
+
+#[allow(dead_code)]
+pub struct CSRRS {
+    pub csr: usize,
+    pub rd: usize,
+    pub rs1: usize,
+}
+
+#[allow(dead_code)]
+impl Op for CSRRS {
+    fn execute(&self, core: &mut Core) {
+        let org = core.csr.read(self.csr);
+        let value = org | core.int_reg.read(self.rs1);
+
+        core.csr.write(self.csr, value);
+        core.int_reg.write(self.csr, org);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for CSRRS {
+    fn to_string(&self) -> String {
+        match (self.rd, self.rs1) {
+            (_, 0) => format!("csrr {},{}", get_int_reg_name(self.rd), get_csr_name(self.csr)),
+            (0, _) => format!("csrr {},{}", get_csr_name(self.csr), get_int_reg_name(self.rs1)),
+            (_, _) => format!("csrrs {},{},{}", get_int_reg_name(self.rd), get_csr_name(self.csr), get_int_reg_name(self.rs1)),
+        }
+    }
+}
+
+#[allow(dead_code)]
+pub struct CSRRC {
+    pub csr: usize,
+    pub rd: usize,
+    pub rs1: usize,
+}
+
+#[allow(dead_code)]
+impl Op for CSRRC {
+    fn execute(&self, core: &mut Core) {
+        let org = core.csr.read(self.csr);
+        let value = org & !core.int_reg.read(self.rs1);
+
+        core.csr.write(self.csr, value);
+        core.int_reg.write(self.csr, org);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for CSRRC {
+    fn to_string(&self) -> String {
+        match self.rd {
+            0 => format!("csrc {},{}", get_csr_name(self.csr), get_int_reg_name(self.rs1)),
+            _ => format!("csrrc {},{},{}", get_int_reg_name(self.rd), get_csr_name(self.csr), get_int_reg_name(self.rs1)),
+        }
+    }
+}
+
+#[allow(dead_code)]
+pub struct CSRRWI {
+    pub csr: usize,
+    pub rd: usize,
+    pub zimm: u32,
+}
+
+#[allow(dead_code)]
+impl Op for CSRRWI {
+    fn execute(&self, core: &mut Core) {
+        let org = core.csr.read(self.csr);
+        let value = self.zimm;
+
+        core.csr.write(self.csr, value);
+        core.int_reg.write(self.csr, org);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for CSRRWI {
+    fn to_string(&self) -> String {
+        match self.rd {
+            0 => format!("csrwi {},{}", get_csr_name(self.csr), self.zimm),
+            _ => format!("csrrwi {},{},{}", get_int_reg_name(self.rd), get_csr_name(self.csr), self.zimm),
+        }
+    }
+}
+
+#[allow(dead_code)]
+pub struct CSRRSI {
+    pub csr: usize,
+    pub rd: usize,
+    pub zimm: u32,
+}
+
+#[allow(dead_code)]
+impl Op for CSRRSI {
+    fn execute(&self, core: &mut Core) {
+        let org = core.csr.read(self.csr);
+        let value = org | self.zimm;
+
+        core.csr.write(self.csr, value);
+        core.int_reg.write(self.csr, org);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for CSRRSI {
+    fn to_string(&self) -> String {
+        match self.rd {
+            0 => format!("csrsi {},{}", get_csr_name(self.csr), self.zimm),
+            _ => format!("csrrsi {},{},{}", get_int_reg_name(self.rd), get_csr_name(self.csr), self.zimm),
+        }
+    }
+}
+
+#[allow(dead_code)]
+pub struct CSRRCI {
+    pub csr: usize,
+    pub rd: usize,
+    pub zimm: u32,
+}
+
+#[allow(dead_code)]
+impl Op for CSRRCI {
+    fn execute(&self, core: &mut Core) {
+        let org = core.csr.read(self.csr);
+        let value = org & !self.zimm;
+
+        core.csr.write(self.csr, value);
+        core.int_reg.write(self.csr, org);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for CSRRCI {
+    fn to_string(&self) -> String {
+        match self.rd {
+            0 => format!("csrci {},{}", get_csr_name(self.csr), self.zimm),
+            _ => format!("csrrci {},{},{}", get_int_reg_name(self.rd), get_csr_name(self.csr), self.zimm),
+        }
+    }
+}
