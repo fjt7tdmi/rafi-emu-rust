@@ -29,17 +29,27 @@ fn test_int_reg() {
     assert_eq!(reg.read(1), 200);
 }
 
-pub struct Csr {  
-    // TODO: impl
+pub struct Csr {
+    values: [u32; 0x1000],
 }
 
-impl Csr {  
+impl Csr {
     pub fn new() -> Csr {
-        Csr {}
+        Csr { values: [0; 0x1000] }
+    }
+
+    pub fn read(&self, index: usize) -> u32 {
+        self.values[index]
+    }
+
+    pub fn write(&mut self, index: usize, value: u32) {
+        if index != 0 {
+            self.values[index] = value
+        }
     }
 }
 
-pub struct Core<'a> {    
+pub struct Core<'a> {
     pub csr: Csr,
     pub int_reg: IntReg,
     pub pc: u32,

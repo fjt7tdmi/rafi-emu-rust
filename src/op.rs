@@ -1045,3 +1045,31 @@ impl ToString for EBREAK {
         format!("ebreak")
     }
 }
+
+#[allow(dead_code)]
+pub struct CSRRW {
+    pub csr: usize,
+    pub rd: usize,
+    pub rs1: usize,
+}
+
+#[allow(dead_code)]
+impl Op for CSRRW {
+    fn execute(&self, core: &mut Core) {
+        let org = core.csr.read(self.csr);
+        let value = core.int_reg.read(self.rs1);
+
+        core.csr.write(self.csr, value);
+        core.int_reg.write(self.csr, org);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for CSRRW {
+    fn to_string(&self) -> String {
+        match self.rd {
+            0 => format!("csrw {},{}", get_csr_name(self.csr), get_int_reg_name(self.rs1)),
+            _ => format!("csrrw {},{},{}", get_int_reg_name(self.rd), get_csr_name(self.csr), get_int_reg_name(self.rs1)),
+        }
+    }
+}
