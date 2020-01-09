@@ -977,3 +977,71 @@ impl ToString for AND {
         format!("and {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
     }
 }
+
+#[allow(dead_code)]
+pub struct FENCE {
+}
+
+#[allow(dead_code)]
+impl Op for FENCE {
+    fn execute(&self, _core: &mut Core) {
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for FENCE {
+    fn to_string(&self) -> String {
+        format!("fence")
+    }
+}
+
+#[allow(dead_code)]
+pub struct FENCEI {
+}
+
+#[allow(dead_code)]
+impl Op for FENCEI {
+    fn execute(&self, _core: &mut Core) {
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for FENCEI {
+    fn to_string(&self) -> String {
+        format!("fence.i")
+    }
+}
+
+#[allow(dead_code)]
+pub struct ECALL {
+}
+
+#[allow(dead_code)]
+impl Op for ECALL {
+    fn execute(&self, _core: &mut Core) {
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for ECALL {
+    fn to_string(&self) -> String {
+        format!("ecall")
+    }
+}
+
+#[allow(dead_code)]
+pub struct EBREAK {
+}
+
+#[allow(dead_code)]
+impl Op for EBREAK {
+    fn execute(&self, _core: &mut Core) {
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for EBREAK {
+    fn to_string(&self) -> String {
+        format!("ebreak")
+    }
+}
