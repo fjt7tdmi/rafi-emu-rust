@@ -724,6 +724,256 @@ impl Op for SRAI {
 #[allow(dead_code)]
 impl ToString for SRAI {
     fn to_string(&self) -> String {
-        format!("srli {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), self.imm)
+        format!("srai {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), self.imm)
+    }
+}
+
+#[allow(dead_code)]
+pub struct ADD {
+    pub rd: usize,
+    pub rs1: usize,
+    pub rs2: usize,
+}
+
+#[allow(dead_code)]
+impl Op for ADD {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let src2 = core.int_reg.read(self.rs2);
+        let value = src1.wrapping_add(src2);
+
+        core.int_reg.write(self.rd, value);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for ADD {
+    fn to_string(&self) -> String {
+        format!("add {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
+    }
+}
+
+#[allow(dead_code)]
+pub struct SUB {
+    pub rd: usize,
+    pub rs1: usize,
+    pub rs2: usize,
+}
+
+#[allow(dead_code)]
+impl Op for SUB {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let src2 = core.int_reg.read(self.rs2);
+        let value = src1.wrapping_sub(src2);
+
+        core.int_reg.write(self.rd, value);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for SUB {
+    fn to_string(&self) -> String {
+        format!("sub {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
+    }
+}
+
+#[allow(dead_code)]
+pub struct SLL {
+    pub rd: usize,
+    pub rs1: usize,
+    pub rs2: usize,
+}
+
+#[allow(dead_code)]
+impl Op for SLL {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let src2 = core.int_reg.read(self.rs2);
+        let value = src1 << src2;
+
+        core.int_reg.write(self.rd, value);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for SLL {
+    fn to_string(&self) -> String {
+        format!("sll {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
+    }
+}
+
+#[allow(dead_code)]
+pub struct SLT {
+    pub rd: usize,
+    pub rs1: usize,
+    pub rs2: usize,
+}
+
+#[allow(dead_code)]
+impl Op for SLT {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let src2 = core.int_reg.read(self.rs2);
+        let value = if (src1 as i32) < (src2 as i32) { 1 } else { 0 };
+
+        core.int_reg.write(self.rd, value);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for SLT {
+    fn to_string(&self) -> String {
+        format!("slt {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
+    }
+}
+
+#[allow(dead_code)]
+pub struct SLTU {
+    pub rd: usize,
+    pub rs1: usize,
+    pub rs2: usize,
+}
+
+#[allow(dead_code)]
+impl Op for SLTU {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let src2 = core.int_reg.read(self.rs2);
+        let value = if src1 < src2 { 1 } else { 0 };
+
+        core.int_reg.write(self.rd, value);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for SLTU {
+    fn to_string(&self) -> String {
+        format!("sltu {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
+    }
+}
+
+#[allow(dead_code)]
+pub struct XOR {
+    pub rd: usize,
+    pub rs1: usize,
+    pub rs2: usize,
+}
+
+#[allow(dead_code)]
+impl Op for XOR {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let src2 = core.int_reg.read(self.rs2);
+        let value = src1 ^ src2;
+
+        core.int_reg.write(self.rd, value);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for XOR {
+    fn to_string(&self) -> String {
+        format!("xor {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
+    }
+}
+
+#[allow(dead_code)]
+pub struct SRL {
+    pub rd: usize,
+    pub rs1: usize,
+    pub rs2: usize,
+}
+
+#[allow(dead_code)]
+impl Op for SRL {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let src2 = core.int_reg.read(self.rs2);
+        let value = src1 >> src2;
+
+        core.int_reg.write(self.rd, value);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for SRL {
+    fn to_string(&self) -> String {
+        format!("srl {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
+    }
+}
+
+#[allow(dead_code)]
+pub struct SRA {
+    pub rd: usize,
+    pub rs1: usize,
+    pub rs2: usize,
+}
+
+#[allow(dead_code)]
+impl Op for SRA {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let src2 = core.int_reg.read(self.rs2);
+        let value = (src1 as i32) >> (src2 as i32);
+
+        core.int_reg.write(self.rd, value as u32);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for SRA {
+    fn to_string(&self) -> String {
+        format!("sra {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
+    }
+}
+
+#[allow(dead_code)]
+pub struct OR {
+    pub rd: usize,
+    pub rs1: usize,
+    pub rs2: usize,
+}
+
+#[allow(dead_code)]
+impl Op for OR {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let src2 = core.int_reg.read(self.rs2);
+        let value = src1 | src2;
+
+        core.int_reg.write(self.rd, value);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for OR {
+    fn to_string(&self) -> String {
+        format!("or {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
+    }
+}
+
+#[allow(dead_code)]
+pub struct AND {
+    pub rd: usize,
+    pub rs1: usize,
+    pub rs2: usize,
+}
+
+#[allow(dead_code)]
+impl Op for AND {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let src2 = core.int_reg.read(self.rs2);
+        let value = src1 & src2;
+
+        core.int_reg.write(self.rd, value);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for AND {
+    fn to_string(&self) -> String {
+        format!("and {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
     }
 }
