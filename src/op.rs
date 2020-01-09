@@ -51,7 +51,7 @@ fn test_lui() {
     let op = LUI { rd: 1, imm: 0x12340000 };
     assert_eq!(op.to_string(), "lui ra,0x12340000");
 
-    op.execute(&mut core);    
+    op.execute(&mut core);
     assert_eq!(core.int_reg.read(1), 0x12340000);
 }
 
@@ -87,11 +87,11 @@ fn test_auipc() {
     assert_eq!(op.to_string(), "auipc ra,0x80000000");
 
     core.pc = 0x40000000;
-    op.execute(&mut core);    
+    op.execute(&mut core);
     assert_eq!(core.int_reg.read(1), 0xc0000000);
 
     core.pc = 0x80000000;
-    op.execute(&mut core);    
+    op.execute(&mut core);
     assert_eq!(core.int_reg.read(1), 0x00000000);
 }
 
@@ -513,3 +513,217 @@ impl ToString for SW {
     }
 }
 
+#[allow(dead_code)]
+pub struct ADDI {
+    pub rd: usize,
+    pub rs1: usize,
+    pub imm: u32,
+}
+
+#[allow(dead_code)]
+impl Op for ADDI {
+    fn execute(&self, core: &mut Core) {
+        let value = core.int_reg.read(self.rs1).wrapping_add(self.imm);
+
+        core.int_reg.write(self.rd, value);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for ADDI {
+    fn to_string(&self) -> String {
+        format!("addi {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), self.imm)
+    }
+}
+
+#[allow(dead_code)]
+pub struct SLTI {
+    pub rd: usize,
+    pub rs1: usize,
+    pub imm: u32,
+}
+
+#[allow(dead_code)]
+impl Op for SLTI {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let value = if (src1 as i32) < (self.imm as i32) { 1 } else { 0 };
+
+        core.int_reg.write(self.rd, value);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for SLTI {
+    fn to_string(&self) -> String {
+        format!("slti {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), self.imm)
+    }
+}
+
+#[allow(dead_code)]
+pub struct SLTIU {
+    pub rd: usize,
+    pub rs1: usize,
+    pub imm: u32,
+}
+
+#[allow(dead_code)]
+impl Op for SLTIU {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let value = if src1 < self.imm { 1 } else { 0 };
+
+        core.int_reg.write(self.rd, value);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for SLTIU {
+    fn to_string(&self) -> String {
+        format!("sltiu {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), self.imm)
+    }
+}
+
+#[allow(dead_code)]
+pub struct XORI {
+    pub rd: usize,
+    pub rs1: usize,
+    pub imm: u32,
+}
+
+#[allow(dead_code)]
+impl Op for XORI {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let value = src1 ^ self.imm;
+
+        core.int_reg.write(self.rd, value);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for XORI {
+    fn to_string(&self) -> String {
+        format!("xori {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), self.imm)
+    }
+}
+
+#[allow(dead_code)]
+pub struct ORI {
+    pub rd: usize,
+    pub rs1: usize,
+    pub imm: u32,
+}
+
+#[allow(dead_code)]
+impl Op for ORI {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let value = src1 | self.imm;
+
+        core.int_reg.write(self.rd, value);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for ORI {
+    fn to_string(&self) -> String {
+        format!("ori {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), self.imm)
+    }
+}
+
+#[allow(dead_code)]
+pub struct ANDI {
+    pub rd: usize,
+    pub rs1: usize,
+    pub imm: u32,
+}
+
+#[allow(dead_code)]
+impl Op for ANDI {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let value = src1 & self.imm;
+
+        core.int_reg.write(self.rd, value);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for ANDI {
+    fn to_string(&self) -> String {
+        format!("andi {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), self.imm)
+    }
+}
+
+#[allow(dead_code)]
+pub struct SLLI {
+    pub rd: usize,
+    pub rs1: usize,
+    pub imm: u32,
+}
+
+#[allow(dead_code)]
+impl Op for SLLI {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let value = src1 << self.imm;
+
+        core.int_reg.write(self.rd, value);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for SLLI {
+    fn to_string(&self) -> String {
+        format!("slli {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), self.imm)
+    }
+}
+
+#[allow(dead_code)]
+pub struct SRLI {
+    pub rd: usize,
+    pub rs1: usize,
+    pub imm: u32,
+}
+
+#[allow(dead_code)]
+impl Op for SRLI {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let value = src1 >> self.imm;
+
+        core.int_reg.write(self.rd, value);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for SRLI {
+    fn to_string(&self) -> String {
+        format!("srli {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), self.imm)
+    }
+}
+
+#[allow(dead_code)]
+pub struct SRAI {
+    pub rd: usize,
+    pub rs1: usize,
+    pub imm: u32,
+}
+
+#[allow(dead_code)]
+impl Op for SRAI {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1) as i32;
+        let value = src1 >> self.imm;
+
+        core.int_reg.write(self.rd, value as u32);
+    }
+}
+
+#[allow(dead_code)]
+impl ToString for SRAI {
+    fn to_string(&self) -> String {
+        format!("srli {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), self.imm)
+    }
+}
