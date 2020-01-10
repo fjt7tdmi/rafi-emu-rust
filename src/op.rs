@@ -5,6 +5,11 @@ use std::string::ToString;
 
 pub trait Op : ToString {
     fn execute(&self, core: &mut Core);
+
+    fn post_check_trap(&self, _core: &mut Core) -> Option<Trap>
+    {
+        None
+    }
 }
 
 pub struct UnknownOp {
@@ -909,6 +914,10 @@ pub struct ECALL {
 impl Op for ECALL {
     fn execute(&self, _core: &mut Core) {
     }
+
+    fn post_check_trap(&self, core: &mut Core) -> Option<Trap>  {
+        Some(Trap::EnvironmentCallFromMachineException{ pc: core.pc })
+    }
 }
 
 impl ToString for ECALL {
@@ -922,6 +931,10 @@ pub struct EBREAK {
 
 impl Op for EBREAK {
     fn execute(&self, _core: &mut Core) {
+    }
+
+    fn post_check_trap(&self, core: &mut Core) -> Option<Trap> {
+        Some(Trap::BreakpointException{ pc: core.pc })
     }
 }
 
@@ -1088,6 +1101,10 @@ pub struct URET {
 impl Op for URET {
     fn execute(&self, _core: &mut Core) {
     }
+
+    fn post_check_trap(&self, core: &mut Core) -> Option<Trap> {
+        Some(Trap::TrapReturn{ pc: core.pc })
+    }
 }
 
 impl ToString for URET {
@@ -1102,6 +1119,10 @@ pub struct SRET {
 impl Op for SRET {
     fn execute(&self, _core: &mut Core) {
     }
+
+    fn post_check_trap(&self, core: &mut Core) -> Option<Trap> {
+        Some(Trap::TrapReturn{ pc: core.pc })
+    }
 }
 
 impl ToString for SRET {
@@ -1115,6 +1136,10 @@ pub struct MRET {
 
 impl Op for MRET {
     fn execute(&self, _core: &mut Core) {
+    }
+
+    fn post_check_trap(&self, core: &mut Core) -> Option<Trap> {
+        Some(Trap::TrapReturn{ pc: core.pc })
     }
 }
 

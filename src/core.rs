@@ -1,5 +1,11 @@
 use bus::*;
 
+pub enum Trap {
+    BreakpointException { pc: u32 },
+    EnvironmentCallFromMachineException{ pc: u32 },
+    TrapReturn { pc: u32 },
+}
+
 pub struct IntReg {
     values: [u32; 32],
 }
