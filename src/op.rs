@@ -95,13 +95,11 @@ fn test_auipc() {
     assert_eq!(core.int_reg.read(1), 0x00000000);
 }
 
-#[allow(dead_code)]
 pub struct JAL {
     pub rd: usize,
     pub imm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for JAL {
     fn execute(&self, core: &mut Core) {
         let next_pc = core.next_pc;
@@ -111,7 +109,6 @@ impl Op for JAL {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for JAL {
     fn to_string(&self) -> String {
         match self.rd {
@@ -121,14 +118,12 @@ impl ToString for JAL {
     }
 }
 
-#[allow(dead_code)]
 pub struct JALR {
     pub rd: usize,
     pub rs1: usize,
     pub imm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for JALR {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
@@ -139,7 +134,6 @@ impl Op for JALR {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for JALR {
     fn to_string(&self) -> String {
         match self.rd {
@@ -149,14 +143,12 @@ impl ToString for JALR {
     }
 }
 
-#[allow(dead_code)]
 pub struct BEQ {
     pub rs1: usize,
     pub rs2: usize,
     pub imm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for BEQ {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
@@ -168,7 +160,6 @@ impl Op for BEQ {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for BEQ {
     fn to_string(&self) -> String {
         match (self.rs1, self.rs2) {
@@ -179,14 +170,12 @@ impl ToString for BEQ {
     }
 }
 
-#[allow(dead_code)]
 pub struct BNE {
     pub rs1: usize,
     pub rs2: usize,
     pub imm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for BNE {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
@@ -198,7 +187,6 @@ impl Op for BNE {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for BNE {
     fn to_string(&self) -> String {
         match (self.rs1, self.rs2) {
@@ -209,14 +197,12 @@ impl ToString for BNE {
     }
 }
 
-#[allow(dead_code)]
 pub struct BLT {
     pub rs1: usize,
     pub rs2: usize,
     pub imm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for BLT {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1) as i32;
@@ -228,7 +214,6 @@ impl Op for BLT {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for BLT {
     fn to_string(&self) -> String {
         match (self.rs1, self.rs2) {
@@ -239,14 +224,12 @@ impl ToString for BLT {
     }
 }
 
-#[allow(dead_code)]
 pub struct BGE {
     pub rs1: usize,
     pub rs2: usize,
     pub imm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for BGE {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1) as i32;
@@ -258,7 +241,6 @@ impl Op for BGE {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for BGE {
     fn to_string(&self) -> String {
         match (self.rs1, self.rs2) {
@@ -269,14 +251,12 @@ impl ToString for BGE {
     }
 }
 
-#[allow(dead_code)]
 pub struct BLTU {
     pub rs1: usize,
     pub rs2: usize,
     pub imm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for BLTU {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
@@ -288,21 +268,18 @@ impl Op for BLTU {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for BLTU {
     fn to_string(&self) -> String {
         format!("bltu {},{},{}", get_int_reg_name(self.rs1), get_int_reg_name(self.rs2), self.imm)
     }
 }
 
-#[allow(dead_code)]
 pub struct BGEU {
     pub rs1: usize,
     pub rs2: usize,
     pub imm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for BGEU {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
@@ -314,21 +291,18 @@ impl Op for BGEU {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for BGEU {
     fn to_string(&self) -> String {
         format!("bgeu {},{},{}", get_int_reg_name(self.rs1), get_int_reg_name(self.rs2), self.imm)
     }
 }
 
-#[allow(dead_code)]
 pub struct LB {
     pub rd: usize,
     pub rs1: usize,
     pub imm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for LB {
     fn execute(&self, core: &mut Core) {
         let addr = core.int_reg.read(self.rs1).wrapping_add(self.imm);
@@ -338,21 +312,18 @@ impl Op for LB {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for LB {
     fn to_string(&self) -> String {
         format!("lb {},{}({})", get_int_reg_name(self.rd), self.imm, get_int_reg_name(self.rs1))
     }
 }
 
-#[allow(dead_code)]
 pub struct LH {
     pub rd: usize,
     pub rs1: usize,
     pub imm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for LH {
     fn execute(&self, core: &mut Core) {
         let addr = core.int_reg.read(self.rs1).wrapping_add(self.imm);
@@ -362,21 +333,18 @@ impl Op for LH {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for LH {
     fn to_string(&self) -> String {
         format!("lh {},{}({})", get_int_reg_name(self.rd), self.imm, get_int_reg_name(self.rs1))
     }
 }
 
-#[allow(dead_code)]
 pub struct LW {
     pub rd: usize,
     pub rs1: usize,
     pub imm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for LW {
     fn execute(&self, core: &mut Core) {
         let addr = core.int_reg.read(self.rs1).wrapping_add(self.imm);
@@ -386,21 +354,18 @@ impl Op for LW {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for LW {
     fn to_string(&self) -> String {
         format!("lw {},{}({})", get_int_reg_name(self.rd), self.imm, get_int_reg_name(self.rs1))
     }
 }
 
-#[allow(dead_code)]
 pub struct LBU {
     pub rd: usize,
     pub rs1: usize,
     pub imm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for LBU {
     fn execute(&self, core: &mut Core) {
         let addr = core.int_reg.read(self.rs1).wrapping_add(self.imm);
@@ -410,21 +375,18 @@ impl Op for LBU {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for LBU {
     fn to_string(&self) -> String {
         format!("lbu {},{}({})", get_int_reg_name(self.rd), self.imm, get_int_reg_name(self.rs1))
     }
 }
 
-#[allow(dead_code)]
 pub struct LHU {
     pub rd: usize,
     pub rs1: usize,
     pub imm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for LHU {
     fn execute(&self, core: &mut Core) {
         let addr = core.int_reg.read(self.rs1).wrapping_add(self.imm);
@@ -434,21 +396,18 @@ impl Op for LHU {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for LHU {
     fn to_string(&self) -> String {
         format!("lhu {},{}({})", get_int_reg_name(self.rd), self.imm, get_int_reg_name(self.rs1))
     }
 }
 
-#[allow(dead_code)]
 pub struct SB {
     pub rs1: usize,
     pub rs2: usize,
     pub imm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for SB {
     fn execute(&self, core: &mut Core) {
         let addr = core.int_reg.read(self.rs1).wrapping_add(self.imm);
@@ -458,21 +417,18 @@ impl Op for SB {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for SB {
     fn to_string(&self) -> String {
         format!("sb {},{}({})", get_int_reg_name(self.rs2), self.imm, get_int_reg_name(self.rs1))
     }
 }
 
-#[allow(dead_code)]
 pub struct SH {
     pub rs1: usize,
     pub rs2: usize,
     pub imm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for SH {
     fn execute(&self, core: &mut Core) {
         let addr = core.int_reg.read(self.rs1).wrapping_add(self.imm);
@@ -482,21 +438,18 @@ impl Op for SH {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for SH {
     fn to_string(&self) -> String {
         format!("sh {},{}({})", get_int_reg_name(self.rs2), self.imm, get_int_reg_name(self.rs1))
     }
 }
 
-#[allow(dead_code)]
 pub struct SW {
     pub rs1: usize,
     pub rs2: usize,
     pub imm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for SW {
     fn execute(&self, core: &mut Core) {
         let addr = core.int_reg.read(self.rs1).wrapping_add(self.imm);
@@ -506,21 +459,18 @@ impl Op for SW {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for SW {
     fn to_string(&self) -> String {
         format!("sw {},{}({})", get_int_reg_name(self.rs2), self.imm, get_int_reg_name(self.rs1))
     }
 }
 
-#[allow(dead_code)]
 pub struct ADDI {
     pub rd: usize,
     pub rs1: usize,
     pub imm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for ADDI {
     fn execute(&self, core: &mut Core) {
         let value = core.int_reg.read(self.rs1).wrapping_add(self.imm);
@@ -529,21 +479,18 @@ impl Op for ADDI {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for ADDI {
     fn to_string(&self) -> String {
         format!("addi {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), self.imm)
     }
 }
 
-#[allow(dead_code)]
 pub struct SLTI {
     pub rd: usize,
     pub rs1: usize,
     pub imm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for SLTI {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
@@ -553,21 +500,18 @@ impl Op for SLTI {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for SLTI {
     fn to_string(&self) -> String {
         format!("slti {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), self.imm)
     }
 }
 
-#[allow(dead_code)]
 pub struct SLTIU {
     pub rd: usize,
     pub rs1: usize,
     pub imm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for SLTIU {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
@@ -577,21 +521,18 @@ impl Op for SLTIU {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for SLTIU {
     fn to_string(&self) -> String {
         format!("sltiu {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), self.imm)
     }
 }
 
-#[allow(dead_code)]
 pub struct XORI {
     pub rd: usize,
     pub rs1: usize,
     pub imm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for XORI {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
@@ -601,21 +542,18 @@ impl Op for XORI {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for XORI {
     fn to_string(&self) -> String {
         format!("xori {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), self.imm)
     }
 }
 
-#[allow(dead_code)]
 pub struct ORI {
     pub rd: usize,
     pub rs1: usize,
     pub imm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for ORI {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
@@ -625,21 +563,18 @@ impl Op for ORI {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for ORI {
     fn to_string(&self) -> String {
         format!("ori {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), self.imm)
     }
 }
 
-#[allow(dead_code)]
 pub struct ANDI {
     pub rd: usize,
     pub rs1: usize,
     pub imm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for ANDI {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
@@ -649,93 +584,81 @@ impl Op for ANDI {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for ANDI {
     fn to_string(&self) -> String {
         format!("andi {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), self.imm)
     }
 }
 
-#[allow(dead_code)]
 pub struct SLLI {
     pub rd: usize,
     pub rs1: usize,
-    pub imm: u32,
+    pub shamt: u32,
 }
 
-#[allow(dead_code)]
 impl Op for SLLI {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
-        let value = src1 << self.imm;
+        let value = src1 << self.shamt;
 
         core.int_reg.write(self.rd, value);
     }
 }
 
-#[allow(dead_code)]
 impl ToString for SLLI {
     fn to_string(&self) -> String {
-        format!("slli {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), self.imm)
+        format!("slli {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), self.shamt)
     }
 }
 
-#[allow(dead_code)]
 pub struct SRLI {
     pub rd: usize,
     pub rs1: usize,
-    pub imm: u32,
+    pub shamt: u32,
 }
 
-#[allow(dead_code)]
 impl Op for SRLI {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
-        let value = src1 >> self.imm;
+        let value = src1 >> self.shamt;
 
         core.int_reg.write(self.rd, value);
     }
 }
 
-#[allow(dead_code)]
 impl ToString for SRLI {
     fn to_string(&self) -> String {
-        format!("srli {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), self.imm)
+        format!("srli {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), self.shamt)
     }
 }
 
-#[allow(dead_code)]
 pub struct SRAI {
     pub rd: usize,
     pub rs1: usize,
-    pub imm: u32,
+    pub shamt: u32,
 }
 
-#[allow(dead_code)]
 impl Op for SRAI {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1) as i32;
-        let value = src1 >> self.imm;
+        let value = src1 >> self.shamt;
 
         core.int_reg.write(self.rd, value as u32);
     }
 }
 
-#[allow(dead_code)]
 impl ToString for SRAI {
     fn to_string(&self) -> String {
-        format!("srai {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), self.imm)
+        format!("srai {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), self.shamt)
     }
 }
 
-#[allow(dead_code)]
 pub struct ADD {
     pub rd: usize,
     pub rs1: usize,
     pub rs2: usize,
 }
 
-#[allow(dead_code)]
 impl Op for ADD {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
@@ -746,21 +669,18 @@ impl Op for ADD {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for ADD {
     fn to_string(&self) -> String {
         format!("add {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
     }
 }
 
-#[allow(dead_code)]
 pub struct SUB {
     pub rd: usize,
     pub rs1: usize,
     pub rs2: usize,
 }
 
-#[allow(dead_code)]
 impl Op for SUB {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
@@ -771,21 +691,18 @@ impl Op for SUB {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for SUB {
     fn to_string(&self) -> String {
         format!("sub {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
     }
 }
 
-#[allow(dead_code)]
 pub struct SLL {
     pub rd: usize,
     pub rs1: usize,
     pub rs2: usize,
 }
 
-#[allow(dead_code)]
 impl Op for SLL {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
@@ -796,21 +713,18 @@ impl Op for SLL {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for SLL {
     fn to_string(&self) -> String {
         format!("sll {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
     }
 }
 
-#[allow(dead_code)]
 pub struct SLT {
     pub rd: usize,
     pub rs1: usize,
     pub rs2: usize,
 }
 
-#[allow(dead_code)]
 impl Op for SLT {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
@@ -821,21 +735,18 @@ impl Op for SLT {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for SLT {
     fn to_string(&self) -> String {
         format!("slt {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
     }
 }
 
-#[allow(dead_code)]
 pub struct SLTU {
     pub rd: usize,
     pub rs1: usize,
     pub rs2: usize,
 }
 
-#[allow(dead_code)]
 impl Op for SLTU {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
@@ -846,21 +757,18 @@ impl Op for SLTU {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for SLTU {
     fn to_string(&self) -> String {
         format!("sltu {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
     }
 }
 
-#[allow(dead_code)]
 pub struct XOR {
     pub rd: usize,
     pub rs1: usize,
     pub rs2: usize,
 }
 
-#[allow(dead_code)]
 impl Op for XOR {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
@@ -871,21 +779,18 @@ impl Op for XOR {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for XOR {
     fn to_string(&self) -> String {
         format!("xor {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
     }
 }
 
-#[allow(dead_code)]
 pub struct SRL {
     pub rd: usize,
     pub rs1: usize,
     pub rs2: usize,
 }
 
-#[allow(dead_code)]
 impl Op for SRL {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
@@ -896,21 +801,18 @@ impl Op for SRL {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for SRL {
     fn to_string(&self) -> String {
         format!("srl {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
     }
 }
 
-#[allow(dead_code)]
 pub struct SRA {
     pub rd: usize,
     pub rs1: usize,
     pub rs2: usize,
 }
 
-#[allow(dead_code)]
 impl Op for SRA {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
@@ -921,21 +823,18 @@ impl Op for SRA {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for SRA {
     fn to_string(&self) -> String {
         format!("sra {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
     }
 }
 
-#[allow(dead_code)]
 pub struct OR {
     pub rd: usize,
     pub rs1: usize,
     pub rs2: usize,
 }
 
-#[allow(dead_code)]
 impl Op for OR {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
@@ -946,21 +845,18 @@ impl Op for OR {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for OR {
     fn to_string(&self) -> String {
         format!("or {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
     }
 }
 
-#[allow(dead_code)]
 pub struct AND {
     pub rd: usize,
     pub rs1: usize,
     pub rs2: usize,
 }
 
-#[allow(dead_code)]
 impl Op for AND {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
@@ -971,89 +867,76 @@ impl Op for AND {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for AND {
     fn to_string(&self) -> String {
         format!("and {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
     }
 }
 
-#[allow(dead_code)]
 pub struct FENCE {
+    pub pred: u32,
+    pub succ: u32,
 }
 
-#[allow(dead_code)]
 impl Op for FENCE {
     fn execute(&self, _core: &mut Core) {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for FENCE {
     fn to_string(&self) -> String {
         format!("fence")
     }
 }
 
-#[allow(dead_code)]
 pub struct FENCEI {
 }
 
-#[allow(dead_code)]
 impl Op for FENCEI {
     fn execute(&self, _core: &mut Core) {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for FENCEI {
     fn to_string(&self) -> String {
         format!("fence.i")
     }
 }
 
-#[allow(dead_code)]
 pub struct ECALL {
 }
 
-#[allow(dead_code)]
 impl Op for ECALL {
     fn execute(&self, _core: &mut Core) {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for ECALL {
     fn to_string(&self) -> String {
         format!("ecall")
     }
 }
 
-#[allow(dead_code)]
 pub struct EBREAK {
 }
 
-#[allow(dead_code)]
 impl Op for EBREAK {
     fn execute(&self, _core: &mut Core) {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for EBREAK {
     fn to_string(&self) -> String {
         format!("ebreak")
     }
 }
 
-#[allow(dead_code)]
 pub struct CSRRW {
     pub csr: usize,
     pub rd: usize,
     pub rs1: usize,
 }
 
-#[allow(dead_code)]
 impl Op for CSRRW {
     fn execute(&self, core: &mut Core) {
         let org = core.csr.read(self.csr);
@@ -1064,7 +947,6 @@ impl Op for CSRRW {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for CSRRW {
     fn to_string(&self) -> String {
         match self.rd {
@@ -1074,14 +956,12 @@ impl ToString for CSRRW {
     }
 }
 
-#[allow(dead_code)]
 pub struct CSRRS {
     pub csr: usize,
     pub rd: usize,
     pub rs1: usize,
 }
 
-#[allow(dead_code)]
 impl Op for CSRRS {
     fn execute(&self, core: &mut Core) {
         let org = core.csr.read(self.csr);
@@ -1092,7 +972,6 @@ impl Op for CSRRS {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for CSRRS {
     fn to_string(&self) -> String {
         match (self.rd, self.rs1) {
@@ -1103,14 +982,12 @@ impl ToString for CSRRS {
     }
 }
 
-#[allow(dead_code)]
 pub struct CSRRC {
     pub csr: usize,
     pub rd: usize,
     pub rs1: usize,
 }
 
-#[allow(dead_code)]
 impl Op for CSRRC {
     fn execute(&self, core: &mut Core) {
         let org = core.csr.read(self.csr);
@@ -1121,7 +998,6 @@ impl Op for CSRRC {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for CSRRC {
     fn to_string(&self) -> String {
         match self.rd {
@@ -1131,14 +1007,12 @@ impl ToString for CSRRC {
     }
 }
 
-#[allow(dead_code)]
 pub struct CSRRWI {
     pub csr: usize,
     pub rd: usize,
     pub zimm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for CSRRWI {
     fn execute(&self, core: &mut Core) {
         let org = core.csr.read(self.csr);
@@ -1149,7 +1023,6 @@ impl Op for CSRRWI {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for CSRRWI {
     fn to_string(&self) -> String {
         match self.rd {
@@ -1159,14 +1032,12 @@ impl ToString for CSRRWI {
     }
 }
 
-#[allow(dead_code)]
 pub struct CSRRSI {
     pub csr: usize,
     pub rd: usize,
     pub zimm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for CSRRSI {
     fn execute(&self, core: &mut Core) {
         let org = core.csr.read(self.csr);
@@ -1177,7 +1048,6 @@ impl Op for CSRRSI {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for CSRRSI {
     fn to_string(&self) -> String {
         match self.rd {
@@ -1187,14 +1057,12 @@ impl ToString for CSRRSI {
     }
 }
 
-#[allow(dead_code)]
 pub struct CSRRCI {
     pub csr: usize,
     pub rd: usize,
     pub zimm: u32,
 }
 
-#[allow(dead_code)]
 impl Op for CSRRCI {
     fn execute(&self, core: &mut Core) {
         let org = core.csr.read(self.csr);
@@ -1205,7 +1073,6 @@ impl Op for CSRRCI {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for CSRRCI {
     fn to_string(&self) -> String {
         match self.rd {
@@ -1215,85 +1082,70 @@ impl ToString for CSRRCI {
     }
 }
 
-#[allow(dead_code)]
 pub struct URET {
 }
 
-#[allow(dead_code)]
 impl Op for URET {
     fn execute(&self, _core: &mut Core) {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for URET {
     fn to_string(&self) -> String {
         format!("uret")
     }
 }
 
-#[allow(dead_code)]
 pub struct SRET {
 }
 
-#[allow(dead_code)]
 impl Op for SRET {
     fn execute(&self, _core: &mut Core) {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for SRET {
     fn to_string(&self) -> String {
         format!("sret")
     }
 }
 
-#[allow(dead_code)]
 pub struct MRET {
 }
 
-#[allow(dead_code)]
 impl Op for MRET {
     fn execute(&self, _core: &mut Core) {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for MRET {
     fn to_string(&self) -> String {
         format!("mret")
     }
 }
 
-#[allow(dead_code)]
 pub struct WFI {
 }
 
-#[allow(dead_code)]
 impl Op for WFI {
     fn execute(&self, _core: &mut Core) {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for WFI {
     fn to_string(&self) -> String {
         format!("wfi")
     }
 }
 
-#[allow(dead_code)]
 pub struct SFENCEVMA {
 }
 
-#[allow(dead_code)]
 impl Op for SFENCEVMA {
     fn execute(&self, _core: &mut Core) {
     }
 }
 
-#[allow(dead_code)]
 impl ToString for SFENCEVMA {
     fn to_string(&self) -> String {
         format!("sfence.vma")
