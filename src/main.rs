@@ -15,6 +15,7 @@ use memory::*;
 fn emulate(path: String) {
     let max_cycle = 1000;
     let host_io_addr = 0x1000;
+    let initial_pc = 0x8000_0000;
 
     let mut memory = Memory::new();
     memory.load_file(path);
@@ -22,13 +23,20 @@ fn emulate(path: String) {
     let mut bus = Bus::new(&mut memory);
     let mut core = Core::new(&mut bus);
 
+    core.pc = initial_pc;
+
     for _i in 0..max_cycle {
         let insn = core.fetch();
         let op = decode(&insn);
-        
+
+        // Currently, 2-byte ops are not supported
+        core.next_pc = core.pc + 4;
+
         println!("{}", op.to_string());
 
         op.execute(&mut core);
+
+        core.pc = core.next_pc;
     }
 
     println!("HostIo: {}", memory.read_u32(host_io_addr));
