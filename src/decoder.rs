@@ -19,15 +19,15 @@ pub fn decode(insn: &u32) -> Box<dyn Op> {
             Box::new(AUIPC{ rd: rd, imm: imm })
         },
         0b1101111 => {
-            let imm =
+            let imm = sign_extend(21,
                 pick(insn, 31, 1) << 20 |
                 pick(insn, 21, 10) << 1 |
                 pick(insn, 20, 1) << 12 |
-                pick(insn, 12, 8) << 12;
+                pick(insn, 12, 8) << 12);
             Box::new(JAL{ rd: rd, imm: imm })
         },
         0b1100111 => {
-            let imm = pick(insn, 20, 12);
+            let imm = sign_extend(12, pick(insn, 20, 12));
             match funct3 {
                 0b000 => Box::new(JALR{ rd: rd, rs1: rs1, imm: imm }),
                 _ => Box::new(UnknownOp{}),
@@ -81,7 +81,7 @@ pub fn decode(insn: &u32) -> Box<dyn Op> {
                 (0b111, _) => Box::new(ANDI { imm: imm, rd: rd, rs1: rs1 }),
                 (0b001, 0b0000000) => Box::new(SLLI{ rd: rd, rs1: rs1, shamt: shamt }),
                 (0b101, 0b0000000) => Box::new(SRLI{ rd: rd, rs1: rs1, shamt: shamt }),
-                (0b101, 0b0000001) => Box::new(SRAI{ rd: rd, rs1: rs1, shamt: shamt }),
+                (0b101, 0b0100000) => Box::new(SRAI{ rd: rd, rs1: rs1, shamt: shamt }),
                 _ => Box::new(UnknownOp{}),
             }
         },
@@ -118,7 +118,7 @@ pub fn decode(insn: &u32) -> Box<dyn Op> {
                 (0b000, 0b0000000, 0b00001, 0b00000, 0b00000) => Box::new(EBREAK{}),
                 (0b000, 0b0000000, 0b00010, 0b00000, 0b00000) => Box::new(URET{}),
                 (0b000, 0b0001000, 0b00010, 0b00000, 0b00000) => Box::new(SRET{}),
-                (0b000, 0b0011000, 0b00010, 0b00000, 0b00000) => Box::new(MRET{}),
+                (0b000, 0b0011000, 0b00010, 0b00000, 0b00000) => Box::new(MRET{}),                                                                              
                 (0b000, 0b0001000, 0b00101, 0b00000, 0b00000) => Box::new(WFI{}),
                 (0b000, 0b0001001, _, _, 0b00000) => Box::new(SFENCEVMA{ }),
                 (0b001, _, _, _, _) => Box::new(CSRRW { csr: csr, rd: rd, rs1: rs1 }),
