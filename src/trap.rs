@@ -45,7 +45,7 @@ fn process_exception(core: &mut Core, trap: &Trap)
     core.csr.write_mepc(trap.pc);
     core.csr.write_mtval(trap.value);
 
-    core.next_pc = mtvec.base();
+    core.next_pc = mtvec.base() << 2;
 }
 
 fn process_trap_return(core: &mut Core, _trap: &Trap)
