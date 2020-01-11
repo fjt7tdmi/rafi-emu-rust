@@ -19,9 +19,9 @@ use memory::*;
 use trap::*;
 
 fn emulate(path: String) {
-    let max_cycle = 1000;
-    let host_io_addr = 0x1000;
-    let initial_pc = 0x8000_0000;
+    const MAX_CYCLE: u32 = 1000;
+    const HOST_IO_ADDR: u32 = 0x80001000;
+    const INITIAL_PC: u32 = 0x8000_0000;
 
     let mut memory = Memory::new();
     memory.load_file(path);
@@ -29,9 +29,14 @@ fn emulate(path: String) {
     let mut bus = Bus::new(&mut memory);
     let mut core = Core::new(&mut bus);
 
-    core.pc = initial_pc;
+    core.host_io_addr = HOST_IO_ADDR;
+    core.pc = INITIAL_PC;
 
-    for _i in 0..max_cycle {
+    for _i in 0..MAX_CYCLE {
+        if core.read_host_io() != 0 {
+            break
+        }
+
         let insn = core.fetch();
         let op = decode(&insn);
 
@@ -50,7 +55,7 @@ fn emulate(path: String) {
         core.pc = core.next_pc;
     }
 
-    println!("HostIo: {}", memory.read_u32(host_io_addr));
+    println!("HostIo: {}", core.read_host_io());
 }
 
 fn main() {

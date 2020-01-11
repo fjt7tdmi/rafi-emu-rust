@@ -36,14 +36,19 @@ pub struct Core<'a> {
     pub pc: u32,
     pub next_pc: u32,
     pub bus: &'a mut Bus<'a>,
+    pub host_io_addr: u32,
 }
 
 impl<'a> Core<'a> {
     pub fn new(bus: &'a mut Bus<'a>) -> Core<'a> {
-        Core { csr: Csr::new(), int_reg: IntReg::new(), pc: 0, next_pc: 0, bus: bus }
+        Core { csr: Csr::new(), int_reg: IntReg::new(), pc: 0, next_pc: 0, bus: bus, host_io_addr: 0 }
     }
 
     pub fn fetch(&self) -> u32 {
         self.bus.read_u32(self.pc)
+    }
+
+    pub fn read_host_io(&self) -> u32 {
+        self.bus.read_u32(self.host_io_addr)
     }
 }
