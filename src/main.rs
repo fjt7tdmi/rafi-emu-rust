@@ -32,7 +32,7 @@ fn emulate(path: String) {
         // Currently, 2-byte ops are not supported
         core.next_pc = core.pc + 4;
 
-        println!("{}", op.to_string());
+        println!("0x{:x}: {}", core.pc, op.to_string());
 
         op.execute(&mut core);
 
