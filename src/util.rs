@@ -269,18 +269,20 @@ pub fn pick(value: &u32, lsb: usize, width: usize) -> u32 {
     (value >> lsb) & ((1 << width) - 1)
 }
 
-pub fn sign_extend(count: usize, value: u32) -> u32 {
-    if value & (1 << count) != 0 {
-        let mask = !((1 << count) - 1);
-        return mask | value
+pub fn sign_extend(width: usize, value: u32) -> u32 {
+    let sign = (value >> (width - 1)) & 1;
+    let mask = (1 << width) - 1;
+
+    if sign == 0 {
+        value & mask
     }
     else {
-        return value
+        value | (!mask)
     }
 }
 
 #[test]
 fn sext_test() {
-    assert_eq!(sign_extend(15, 0x00008888), 0xffff8888);
-    assert_eq!(sign_extend(16, 0x00008888), 0x00008888);
+    assert_eq!(sign_extend(16, 0x00008888), 0xffff8888);
+    assert_eq!(sign_extend(17, 0x00008888), 0x00008888);
 }
