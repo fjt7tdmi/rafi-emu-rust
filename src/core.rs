@@ -1,4 +1,5 @@
 use bus::*;
+use csr::*;
 
 pub enum Trap {
     BreakpointException { pc: u32 },
@@ -33,26 +34,6 @@ fn test_int_reg() {
     reg.write(1, 200);
     assert_eq!(reg.read(0), 0);
     assert_eq!(reg.read(1), 200);
-}
-
-pub struct Csr {
-    values: [u32; 0x1000],
-}
-
-impl Csr {
-    pub fn new() -> Csr {
-        Csr { values: [0; 0x1000] }
-    }
-
-    pub fn read(&self, index: usize) -> u32 {
-        self.values[index]
-    }
-
-    pub fn write(&mut self, index: usize, value: u32) {
-        if index != 0 {
-            self.values[index] = value
-        }
-    }
 }
 
 pub struct Core<'a> {
