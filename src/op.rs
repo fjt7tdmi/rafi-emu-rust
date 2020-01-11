@@ -956,7 +956,7 @@ impl Op for CSRRW {
         let value = core.int_reg.read(self.rs1);
 
         core.csr.write(self.csr, value);
-        core.int_reg.write(self.csr, org);
+        core.int_reg.write(self.rd, org);
     }
 }
 
@@ -981,7 +981,7 @@ impl Op for CSRRS {
         let value = org | core.int_reg.read(self.rs1);
 
         core.csr.write(self.csr, value);
-        core.int_reg.write(self.csr, org);
+        core.int_reg.write(self.rd, org);
     }
 }
 
@@ -1007,7 +1007,7 @@ impl Op for CSRRC {
         let value = org & !core.int_reg.read(self.rs1);
 
         core.csr.write(self.csr, value);
-        core.int_reg.write(self.csr, org);
+        core.int_reg.write(self.rd, org);
     }
 }
 
@@ -1032,7 +1032,7 @@ impl Op for CSRRWI {
         let value = self.zimm;
 
         core.csr.write(self.csr, value);
-        core.int_reg.write(self.csr, org);
+        core.int_reg.write(self.rd, org);
     }
 }
 
@@ -1057,7 +1057,7 @@ impl Op for CSRRSI {
         let value = org | self.zimm;
 
         core.csr.write(self.csr, value);
-        core.int_reg.write(self.csr, org);
+        core.int_reg.write(self.rd, org);
     }
 }
 
@@ -1082,7 +1082,7 @@ impl Op for CSRRCI {
         let value = org & !self.zimm;
 
         core.csr.write(self.csr, value);
-        core.int_reg.write(self.csr, org);
+        core.int_reg.write(self.rd, org);
     }
 }
 
