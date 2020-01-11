@@ -2,6 +2,8 @@
 extern crate bitfield;
 
 extern crate byteorder;
+extern crate serde;
+extern crate serde_json;
 
 mod bus;
 mod core;
@@ -17,6 +19,9 @@ use core::*;
 use decoder::*;
 use memory::*;
 use trap::*;
+
+use std::fs::File;
+use std::io::BufReader;
 
 fn emulate(path: String) {
     const MAX_CYCLE: u32 = 1000;
@@ -43,8 +48,6 @@ fn emulate(path: String) {
         // Currently, 2-byte ops are not supported
         core.next_pc = core.pc + 4;
 
-        println!("0x{:x}: {}", core.pc, op.to_string());
-
         op.execute(&mut core);
 
         match op.post_check_trap(&mut core) {
@@ -58,7 +61,22 @@ fn emulate(path: String) {
     println!("HostIo: {}", core.read_host_io());
 }
 
+
+fn get_tests() -> Vec<String> {
+    let file = File::open("riscv_tests.json").unwrap();
+    let reader = BufReader::new(file);
+    let tests: Vec<String> = serde_json::from_reader(reader).unwrap();
+    
+    tests
+}
+
 fn main() {
-    let path = "rafi-prebuilt-binary/riscv-tests/isa/rv32ui-p-add.bin";
-    emulate(path.to_string());
+    let tests = get_tests();
+    for test in tests {
+        let path = format!("rafi-prebuilt-binary/riscv-tests/isa/{}.bin", test);
+        println!("{}", path);
+
+        emulate(path.to_string());
+    }
+
 }

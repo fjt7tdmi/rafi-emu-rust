@@ -7,3 +7,5 @@ authors = ["Akifumi Fujita <fujita.akifumi@gmail.com>"]
 bitfield = "*"
 byteorder = "1.2.4"
 num = "*"
+serde = "*"
+serde_json = "1.0"
