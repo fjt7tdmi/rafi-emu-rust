@@ -417,7 +417,7 @@ pub struct SB {
 impl Op for SB {
     fn execute(&self, core: &mut Core) {
         let addr = core.int_reg.read(self.rs1).wrapping_add(self.imm);
-        let value = core.int_reg.read(self.rs1) as u8;
+        let value = core.int_reg.read(self.rs2) as u8;
 
         core.bus.write_u8(addr, value);
     }
@@ -438,7 +438,7 @@ pub struct SH {
 impl Op for SH {
     fn execute(&self, core: &mut Core) {
         let addr = core.int_reg.read(self.rs1).wrapping_add(self.imm);
-        let value = core.int_reg.read(self.rs1) as u16;
+        let value = core.int_reg.read(self.rs2) as u16;
 
         core.bus.write_u16(addr, value);
     }
@@ -459,7 +459,7 @@ pub struct SW {
 impl Op for SW {
     fn execute(&self, core: &mut Core) {
         let addr = core.int_reg.read(self.rs1).wrapping_add(self.imm);
-        let value = core.int_reg.read(self.rs1) as u32;
+        let value = core.int_reg.read(self.rs2) as u32;
 
         core.bus.write_u32(addr, value);
     }
