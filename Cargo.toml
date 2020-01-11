@@ -4,5 +4,6 @@ version = "0.1.0"
 authors = ["Akifumi Fujita <fujita.akifumi@gmail.com>"]
 
 [dependencies]
+bitflags = "*"
 byteorder = "1.2.4"
 num = "*"
