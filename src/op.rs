@@ -1,4 +1,5 @@
 use core::*;
+use trap::*;
 use util::*;
 
 use std::string::ToString;
@@ -916,7 +917,7 @@ impl Op for ECALL {
     }
 
     fn post_check_trap(&self, core: &mut Core) -> Option<Trap>  {
-        Some(Trap::EnvironmentCallFromMachineException{ pc: core.pc })
+        Some(Trap::new_ecall_from_machine(core.pc))
     }
 }
 
@@ -934,7 +935,7 @@ impl Op for EBREAK {
     }
 
     fn post_check_trap(&self, core: &mut Core) -> Option<Trap> {
-        Some(Trap::BreakpointException{ pc: core.pc })
+        Some(Trap::new_ebreak(core.pc))
     }
 }
 
@@ -1103,7 +1104,7 @@ impl Op for URET {
     }
 
     fn post_check_trap(&self, core: &mut Core) -> Option<Trap> {
-        Some(Trap::TrapReturn{ pc: core.pc })
+        Some(Trap::new_trap_return(core.pc))
     }
 }
 
@@ -1121,7 +1122,7 @@ impl Op for SRET {
     }
 
     fn post_check_trap(&self, core: &mut Core) -> Option<Trap> {
-        Some(Trap::TrapReturn{ pc: core.pc })
+        Some(Trap::new_trap_return(core.pc))
     }
 }
 
@@ -1139,7 +1140,7 @@ impl Op for MRET {
     }
 
     fn post_check_trap(&self, core: &mut Core) -> Option<Trap> {
-        Some(Trap::TrapReturn{ pc: core.pc })
+        Some(Trap::new_trap_return(core.pc))
     }
 }
 

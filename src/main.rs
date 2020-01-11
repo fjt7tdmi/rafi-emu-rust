@@ -1,5 +1,5 @@
 #[macro_use]
-extern crate bitflags;
+extern crate bitfield;
 
 extern crate byteorder;
 
@@ -9,12 +9,14 @@ mod csr;
 mod decoder;
 mod memory;
 mod op;
+mod trap;
 mod util;
 
 use bus::*;
 use core::*;
 use decoder::*;
 use memory::*;
+use trap::*;
 
 fn emulate(path: String) {
     let max_cycle = 1000;
@@ -39,6 +41,11 @@ fn emulate(path: String) {
         println!("0x{:x}: {}", core.pc, op.to_string());
 
         op.execute(&mut core);
+
+        match op.post_check_trap(&mut core) {
+            Some(trap) => process_trap(&mut core, &trap),
+            None => (),
+        }
 
         core.pc = core.next_pc;
     }

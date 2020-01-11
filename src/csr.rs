@@ -9,33 +9,33 @@ const CSR_INDEX_MCAUSE  : usize = 0x342;
 const CSR_INDEX_MTVAL   : usize = 0x343;
 
 // register definitions
-bitflags! {
-    pub struct MSTATUS: u32 {
-        const SD    = 0b1000_0000_0000_0000_0000_0000_0000_0000;
-        const TSR   = 0b0000_0000_0100_0000_0000_0000_0000_0000;
-        const TW    = 0b0000_0000_0010_0000_0000_0000_0000_0000;
-        const TVM   = 0b0000_0000_0001_0000_0000_0000_0000_0000;
-        const MXR   = 0b0000_0000_0000_1000_0000_0000_0000_0000;
-        const SUM   = 0b0000_0000_0000_0100_0000_0000_0000_0000;
-        const MPRV  = 0b0000_0000_0000_0010_0000_0000_0000_0000;
-        const XS    = 0b0000_0000_0000_0001_1000_0000_0000_0000;
-        const FS    = 0b0000_0000_0000_0000_0110_0000_0000_0000;
-        const MPP   = 0b0000_0000_0000_0000_0001_1000_0000_0000;
-        const SPP   = 0b0000_0000_0000_0000_0000_0001_0000_0000;
-        const MPIE  = 0b0000_0000_0000_0000_0000_0000_1000_0000;
-        const SPIE  = 0b0000_0000_0000_0000_0000_0000_0010_0000;
-        const UPIE  = 0b0000_0000_0000_0000_0000_0000_0001_0000;
-        const MIE   = 0b0000_0000_0000_0000_0000_0000_0000_1000;
-        const SIE   = 0b0000_0000_0000_0000_0000_0000_0000_0010;
-        const UIE   = 0b0000_0000_0000_0000_0000_0000_0000_0001;
-    }
+bitfield! {
+    pub struct MSTATUS(u32);
+    impl Debug;
+    pub sd,     set_sd:     31, 31;
+    pub tsr,    set_tsr:    22, 22;
+    pub tw,     set_tw:     21, 21;
+    pub tvm,    set_tvm:    20, 20;
+    pub mxr,    set_mxr:    19, 19;
+    pub sum,    set_sum:    18, 18;
+    pub mprv,   set_mprv:   17, 17;
+    pub xs,     set_xs:     16, 15;
+    pub fs,     set_fs:     14, 13;
+    pub mpp,    set_mpp:    12, 11;
+    pub spp,    set_spp:     8,  8;
+    pub mpie,   set_mpie:    7,  7;
+    pub spie,   set_spie:    5,  5;
+    pub upie,   set_upie:    4,  4;
+    pub mie,    set_mie:     3,  3;
+    pub sie,    set_sie:     1,  1;
+    pub uie,    set_uei:     0,  0;
 }
 
-bitflags! {
-    pub struct MTVEC: u32 {
-        const BASE = 0xffff_fffc;
-        const MODE = 0x0000_0003;
-    }
+bitfield! {
+    pub struct MTVEC(u32);
+    impl Debug;
+    pub base,   set_base:   31,  2;
+    pub mode,   set_mode:    1,  0;
 }
 
 // CSR struct definition
@@ -58,19 +58,19 @@ impl Csr {
     }
 
     pub fn read_mstatus(&self) -> MSTATUS {
-        MSTATUS::from_bits_truncate(self.read(CSR_INDEX_MSTATUS))
+        MSTATUS(self.read(CSR_INDEX_MSTATUS))
     }
 
-    pub fn write_mstatus(&mut self, value: MTVEC) {
-        self.write(CSR_INDEX_MSTATUS, value.bits())
+    pub fn write_mstatus(&mut self, value: MSTATUS) {
+        self.write(CSR_INDEX_MSTATUS, value.0)
     }
 
     pub fn read_mtvec(&self) -> MTVEC {
-        MTVEC::from_bits_truncate(self.read(CSR_INDEX_MTVEC))
+        MTVEC(self.read(CSR_INDEX_MTVEC))
     }
 
     pub fn write_mtvec(&mut self, value: MTVEC) {
-        self.write(CSR_INDEX_MTVEC, value.bits())
+        self.write(CSR_INDEX_MTVEC, value.0)
     }
 
     pub fn read_mepc(&self) -> u32 {
