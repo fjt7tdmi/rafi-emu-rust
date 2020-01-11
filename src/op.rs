@@ -605,7 +605,7 @@ pub struct SLLI {
 impl Op for SLLI {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
-        let value = src1 << self.shamt;
+        let value = src1.wrapping_shl(self.shamt);
 
         core.int_reg.write(self.rd, value);
     }
@@ -626,7 +626,7 @@ pub struct SRLI {
 impl Op for SRLI {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
-        let value = src1 >> self.shamt;
+        let value = src1.wrapping_shr(self.shamt);
 
         core.int_reg.write(self.rd, value);
     }
@@ -647,7 +647,7 @@ pub struct SRAI {
 impl Op for SRAI {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1) as i32;
-        let value = src1 >> self.shamt;
+        let value = src1.wrapping_shr(self.shamt);
 
         core.int_reg.write(self.rd, value as u32);
     }
@@ -713,7 +713,7 @@ impl Op for SLL {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
         let src2 = core.int_reg.read(self.rs2);
-        let value = src1 << src2;
+        let value = src1.wrapping_shl(src2);
 
         core.int_reg.write(self.rd, value);
     }
@@ -801,7 +801,7 @@ impl Op for SRL {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
         let src2 = core.int_reg.read(self.rs2);
-        let value = src1 >> src2;
+        let value = src1.wrapping_shr(src2);
 
         core.int_reg.write(self.rd, value);
     }
@@ -823,7 +823,7 @@ impl Op for SRA {
     fn execute(&self, core: &mut Core) {
         let src1 = core.int_reg.read(self.rs1);
         let src2 = core.int_reg.read(self.rs2);
-        let value = (src1 as i32) >> (src2 as i32);
+        let value = (src1 as i32).wrapping_shr(src2);
 
         core.int_reg.write(self.rd, value as u32);
     }
