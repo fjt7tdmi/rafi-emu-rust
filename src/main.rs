@@ -22,8 +22,9 @@ use trap::*;
 
 use std::fs::File;
 use std::io::BufReader;
+use std::process::exit;
 
-fn emulate(path: String) {
+fn emulate(path: String) -> u32 {
     const MAX_CYCLE: u32 = 1000;
     const HOST_IO_ADDR: u32 = 0x80001000;
     const INITIAL_PC: u32 = 0x8000_0000;
@@ -59,6 +60,7 @@ fn emulate(path: String) {
     }
 
     println!("HostIo: {}", core.read_host_io());
+    core.read_host_io()
 }
 
 
@@ -71,12 +73,17 @@ fn get_tests() -> Vec<String> {
 }
 
 fn main() {
+    let mut failed_test_num: i32 = 0;
+
     let tests = get_tests();
     for test in tests {
         let path = format!("rafi-prebuilt-binary/riscv-tests/isa/{}.bin", test);
         println!("{}", path);
 
-        emulate(path.to_string());
+        if emulate(path.to_string()) != 1 {
+            failed_test_num += 1;
+        }
     }
 
+    exit(failed_test_num)
 }
