@@ -9,7 +9,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - name: checkout prebuilt binary
+      run: ./checkout_prebuilt_binary_for_ci.sh ${{ secrets.RAFI_PREBUILT_BINARY_USER }} ${{ secrets.RAFI_PREBUILT_BINARY_ACCESS_TOKEN }}
     - name: Build
       run: cargo build --verbose
     - name: Run tests
       run: cargo test --verbose
+    - name: Run riscv-tests
+      run: cargo run
