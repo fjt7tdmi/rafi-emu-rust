@@ -1177,3 +1177,209 @@ impl ToString for SFENCEVMA {
         format!("sfence.vma")
     }
 }
+
+pub struct MUL {
+    pub rd: usize,
+    pub rs1: usize,
+    pub rs2: usize,
+}
+
+impl Op for MUL {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let src2 = core.int_reg.read(self.rs2);
+        let value = src1.wrapping_mul(src2);
+
+        core.int_reg.write(self.rd, value);
+    }
+}
+
+impl ToString for MUL {
+    fn to_string(&self) -> String {
+        format!("mul {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
+    }
+}
+
+pub struct MULH {
+    pub rd: usize,
+    pub rs1: usize,
+    pub rs2: usize,
+}
+
+impl Op for MULH {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1) as i32;
+        let src2 = core.int_reg.read(self.rs2) as i32;
+        let value = (src1 as i64) * (src2 as i64) >> 32;
+
+        core.int_reg.write(self.rd, value as u32);
+    }
+}
+
+impl ToString for MULH {
+    fn to_string(&self) -> String {
+        format!("mulh {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
+    }
+}
+
+pub struct MULHSU {
+    pub rd: usize,
+    pub rs1: usize,
+    pub rs2: usize,
+}
+
+impl Op for MULHSU {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1) as i32;
+        let src2 = core.int_reg.read(self.rs2);
+        let value = (src1 as i64) * (src2 as i64) >> 32;
+
+        core.int_reg.write(self.rd, value as u32);
+    }
+}
+
+impl ToString for MULHSU {
+    fn to_string(&self) -> String {
+        format!("mulhsu {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
+    }
+}
+
+pub struct MULHU {
+    pub rd: usize,
+    pub rs1: usize,
+    pub rs2: usize,
+}
+
+impl Op for MULHU {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let src2 = core.int_reg.read(self.rs2);
+        let value = (src1 as u64) * (src2 as u64) >> 32;
+
+        core.int_reg.write(self.rd, value as u32);
+    }
+}
+
+impl ToString for MULHU {
+    fn to_string(&self) -> String {
+        format!("mulhu {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
+    }
+}
+
+pub struct DIV {
+    pub rd: usize,
+    pub rs1: usize,
+    pub rs2: usize,
+}
+
+impl Op for DIV {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let src2 = core.int_reg.read(self.rs2);
+
+        let value = if src1 == 0x80000000 && src2 == 0xffffffff {
+            0x80000000
+        }
+        else if src2 == 0 {
+            0xffffffff
+        }
+        else {
+            (src1 as i32).wrapping_div(src2 as i32) as u32
+        };
+
+        core.int_reg.write(self.rd, value);
+    }
+}
+
+impl ToString for DIV {
+    fn to_string(&self) -> String {
+        format!("div {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
+    }
+}
+
+pub struct DIVU {
+    pub rd: usize,
+    pub rs1: usize,
+    pub rs2: usize,
+}
+
+impl Op for DIVU {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let src2 = core.int_reg.read(self.rs2);
+
+        let value = if src2 == 0 {
+            0xffffffff
+        }
+        else {
+            src1.wrapping_div(src2)
+        };
+
+        core.int_reg.write(self.rd, value);
+    }
+}
+
+impl ToString for DIVU {
+    fn to_string(&self) -> String {
+        format!("divu {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
+    }
+}
+
+pub struct REM {
+    pub rd: usize,
+    pub rs1: usize,
+    pub rs2: usize,
+}
+
+impl Op for REM {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let src2 = core.int_reg.read(self.rs2);
+
+        let value = if src1 == 0x80000000 && src2 == 0xffffffff {
+            0
+        }
+        else if src2 == 0 {
+            src1
+        }
+        else {
+            (src1 as i32).wrapping_rem(src2 as i32) as u32
+        };
+
+        core.int_reg.write(self.rd, value);
+    }
+}
+
+impl ToString for REM {
+    fn to_string(&self) -> String {
+        format!("rem {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
+    }
+}
+
+pub struct REMU {
+    pub rd: usize,
+    pub rs1: usize,
+    pub rs2: usize,
+}
+
+impl Op for REMU {
+    fn execute(&self, core: &mut Core) {
+        let src1 = core.int_reg.read(self.rs1);
+        let src2 = core.int_reg.read(self.rs2);
+
+        let value = if src2 == 0 {
+            src1
+        }
+        else {
+            src1.wrapping_rem(src2)
+        };
+
+        core.int_reg.write(self.rd, value);
+    }
+}
+
+impl ToString for REMU {
+    fn to_string(&self) -> String {
+        format!("remu {},{},{}", get_int_reg_name(self.rd), get_int_reg_name(self.rs1), get_int_reg_name(self.rs2))
+    }
+}
