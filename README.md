@@ -8,7 +8,7 @@ Toy riscv emulator by Rust
 |Feature      |Progress|
 |-------------|--------|
 |RV32I        |DONE    |
-|RV32M        |-       |
+|RV32M        |DONE    |
 |RV32A        |-       |
 |RV32F        |-       |
 |RV32D        |-       |
